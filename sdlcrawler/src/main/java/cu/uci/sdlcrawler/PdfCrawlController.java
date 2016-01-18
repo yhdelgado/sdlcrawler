@@ -21,9 +21,14 @@ import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,40 +41,32 @@ public class PdfCrawlController {
     private static Logger logger = LoggerFactory.getLogger(PdfCrawlController.class);
 
     public static void main(String[] args) throws Exception {
+        Properties cm = PdfCrawlerConfigManager.getInstance().loadConfigFile();
         long startTime = System.currentTimeMillis();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         System.out.println(dateFormat.format(date));
-        String rootFolder = "root";
         int numberOfCrawlers = Integer.parseInt("5");
-        String storageFolder = "pdf";
+        String pdfFolder = cm.getProperty("sdlcrawler.CrawlPdfFolder");
 
         CrawlConfig config = new CrawlConfig();
 
-        config.setCrawlStorageFolder(rootFolder);
-        config.setMaxDownloadSize(5242880);
-        config.setIncludeBinaryContentInCrawling(true);
-        config.setFollowRedirects(true);
-        config.setUserAgentString("sdlcrawler");
-        config.setProxyHost("localhost");
-        config.setProxyPort(3128);
-        config.setMaxDepthOfCrawling(4);
-        //config.setMaxConnectionsPerHost(5);
-        config.setSocketTimeout(0);
+        config.setCrawlStorageFolder(cm.getProperty("sdlcrawler.CrawlStorageFolder"));
+        config.setMaxDownloadSize(Integer.parseInt(cm.getProperty("sdlcrawler.MaxDownloadSize")));
+        config.setIncludeBinaryContentInCrawling(Boolean.parseBoolean(cm.getProperty("sdlcrawler.IncludeBinaryContent")));
+        config.setFollowRedirects(Boolean.parseBoolean(cm.getProperty("sdlcrawler.Redirects")));
+        config.setUserAgentString(cm.getProperty("sdlcrawler.UserAgent"));
+        config.setProxyHost(cm.getProperty("sdlcrawler.ProxyHost"));
+        config.setProxyPort(Integer.parseInt(cm.getProperty("sdlcrawler.ProxyPort")));
+        config.setMaxDepthOfCrawling(Integer.parseInt(cm.getProperty("sdlcrawler.MaxDepthCrawl")));
+        config.setMaxConnectionsPerHost(Integer.parseInt(cm.getProperty("sdlcrawler.MaxConnectionsPerHost")));
+        config.setSocketTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.SocketTimeout")));
+        config.setMaxOutgoingLinksToFollow(Integer.parseInt(cm.getProperty("sdlcrawler.MaxOutgoingLinks")));
         System.out.println(config.toString());
-        //config.setMaxOutgoingLinksToFollow(50000);
-        //System.out.println(config.getMaxOutgoingLinksToFollow());
-        //System.exit(0);
 
-        //String[] crawlDomains = new String[]{"http://cinfo.idict.cu/"};
-        //String[] crawlDomains = new String[]{"http://scielo.sld.cu/"};
-        String[] crawlDomains = new String[]{
-            //"http://cvi.mes.edu.cu/peduniv/index.php/peduniv/", 
-        "http://rci.cujae.edu.cu/index.php/rci",
-        //"http://censa.mes.edu.cu/index.php/RPV/",
-        //"http://publicaciones.uci.cu/index.php/SC",
-        //"http://rii.cujae.edu.cu/index.php/revistaind/"
-        };
+        List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
+        String[] crawlDomains = list.toArray(new String[list.size()]);
+
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
@@ -78,7 +75,7 @@ public class PdfCrawlController {
             controller.addSeed(domain);
         }
 
-        PdfCrawler.configure(crawlDomains, storageFolder);
+        PdfCrawler.configure(crawlDomains, pdfFolder);
 
         controller.start(PdfCrawler.class, numberOfCrawlers);
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
