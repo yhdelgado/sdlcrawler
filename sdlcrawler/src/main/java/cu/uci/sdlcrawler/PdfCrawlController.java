@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Yasser Ganjisaffar [lastname at gmail dot com]
+ * @author Yusniel Hidalgo Delgado [yhdelgado at uci dot cu]
  */
 public class PdfCrawlController {
 
@@ -49,7 +50,7 @@ public class PdfCrawlController {
         config.setMaxDownloadSize(5242880);
         config.setIncludeBinaryContentInCrawling(true);
         config.setFollowRedirects(true);
-        config.setUserAgentString("yusniel-test");
+        config.setUserAgentString("sdlcrawler");
         config.setProxyHost("localhost");
         config.setProxyPort(3128);
         config.setMaxDepthOfCrawling(4);
@@ -85,6 +86,6 @@ public class PdfCrawlController {
         System.out.println(dateFormat1.format(date1));
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
-        System.out.println("Tiempo total:" + totalTime);
+        System.out.println("Total time:" + totalTime);
     }
 }

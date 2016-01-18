@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Yasser Ganjisaffar [lastname at gmail dot com]
+ * @author Yusniel Hidalgo Delgado [yhdelgado at uci dot cu]
  */
 
 /*
