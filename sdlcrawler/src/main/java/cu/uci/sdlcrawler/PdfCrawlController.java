@@ -63,6 +63,7 @@ public class PdfCrawlController {
         config.setSocketTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.SocketTimeout")));
         config.setMaxOutgoingLinksToFollow(Integer.parseInt(cm.getProperty("sdlcrawler.MaxOutgoingLinks")));
         System.out.println(config.toString());
+        System.out.println("fsfsss"+config.getPolitenessDelay());
 
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
         String[] crawlDomains = list.toArray(new String[list.size()]);
