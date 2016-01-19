@@ -13,7 +13,7 @@ import java.util.Properties;
 
 /**
  *
- * @author yusniel
+ * @author Yusniel Hidalgo Delgado [yhidalgo86 at gmail dot com]
  */
 public class PdfCrawlerConfigManager {
 
