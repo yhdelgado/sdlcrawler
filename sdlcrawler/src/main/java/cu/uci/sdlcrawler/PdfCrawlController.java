@@ -52,18 +52,19 @@ public class PdfCrawlController {
         CrawlConfig config = new CrawlConfig();
 
         config.setCrawlStorageFolder(cm.getProperty("sdlcrawler.CrawlStorageFolder"));
+        config.setProxyHost(cm.getProperty("sdlcrawler.ProxyHost"));
+        config.setProxyPort(Integer.parseInt(cm.getProperty("sdlcrawler.ProxyPort")));
         config.setMaxDownloadSize(Integer.parseInt(cm.getProperty("sdlcrawler.MaxDownloadSize")));
         config.setIncludeBinaryContentInCrawling(Boolean.parseBoolean(cm.getProperty("sdlcrawler.IncludeBinaryContent")));
         config.setFollowRedirects(Boolean.parseBoolean(cm.getProperty("sdlcrawler.Redirects")));
         config.setUserAgentString(cm.getProperty("sdlcrawler.UserAgent"));
-        config.setProxyHost(cm.getProperty("sdlcrawler.ProxyHost"));
-        config.setProxyPort(Integer.parseInt(cm.getProperty("sdlcrawler.ProxyPort")));
         config.setMaxDepthOfCrawling(Integer.parseInt(cm.getProperty("sdlcrawler.MaxDepthCrawl")));
         config.setMaxConnectionsPerHost(Integer.parseInt(cm.getProperty("sdlcrawler.MaxConnectionsPerHost")));
         config.setSocketTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.SocketTimeout")));
         config.setMaxOutgoingLinksToFollow(Integer.parseInt(cm.getProperty("sdlcrawler.MaxOutgoingLinks")));
-        System.out.println("SdlCrawler configuration:"+config.toString());
-        
+
+        System.out.println(config.toString());
+
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
         String[] crawlDomains = list.toArray(new String[list.size()]);
 
