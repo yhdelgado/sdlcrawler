@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Yasser Ganjisaffar [lastname at gmail dot com]
- * @author Yusniel Hidalgo Delgado [yhdelgado at uci dot cu]
+ * @author Yusniel Hidalgo Delgado [yhidalgo86 at gmail dot com]
  */
 public class PdfCrawlController {
 
@@ -62,9 +62,8 @@ public class PdfCrawlController {
         config.setMaxConnectionsPerHost(Integer.parseInt(cm.getProperty("sdlcrawler.MaxConnectionsPerHost")));
         config.setSocketTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.SocketTimeout")));
         config.setMaxOutgoingLinksToFollow(Integer.parseInt(cm.getProperty("sdlcrawler.MaxOutgoingLinks")));
-        System.out.println(config.toString());
-        System.out.println("fsfsss"+config.getPolitenessDelay());
-
+        System.out.println("SdlCrawler configuration:"+config.toString());
+        
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
         String[] crawlDomains = list.toArray(new String[list.size()]);
 
