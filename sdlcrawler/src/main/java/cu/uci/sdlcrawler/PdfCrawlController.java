@@ -46,7 +46,7 @@ public class PdfCrawlController {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         System.out.println(dateFormat.format(date));
-        int numberOfCrawlers = Integer.parseInt("5");
+        int numberOfCrawlers = Integer.parseInt(cm.getProperty("sdlcrawler.NumberOfCrawlers"));
         String pdfFolder = cm.getProperty("sdlcrawler.CrawlPdfFolder");
 
         CrawlConfig config = new CrawlConfig();
@@ -54,6 +54,8 @@ public class PdfCrawlController {
         config.setCrawlStorageFolder(cm.getProperty("sdlcrawler.CrawlStorageFolder"));
         config.setProxyHost(cm.getProperty("sdlcrawler.ProxyHost"));
         config.setProxyPort(Integer.parseInt(cm.getProperty("sdlcrawler.ProxyPort")));
+        config.setProxyUsername(cm.getProperty("sdlcrawler.ProxyUser"));
+        config.setProxyPassword(cm.getProperty("sdlcrawler.ProxyPass"));
         config.setMaxDownloadSize(Integer.parseInt(cm.getProperty("sdlcrawler.MaxDownloadSize")));
         config.setIncludeBinaryContentInCrawling(Boolean.parseBoolean(cm.getProperty("sdlcrawler.IncludeBinaryContent")));
         config.setFollowRedirects(Boolean.parseBoolean(cm.getProperty("sdlcrawler.Redirects")));
@@ -62,7 +64,10 @@ public class PdfCrawlController {
         config.setMaxConnectionsPerHost(Integer.parseInt(cm.getProperty("sdlcrawler.MaxConnectionsPerHost")));
         config.setSocketTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.SocketTimeout")));
         config.setMaxOutgoingLinksToFollow(Integer.parseInt(cm.getProperty("sdlcrawler.MaxOutgoingLinks")));
-
+        config.setResumableCrawling(Boolean.parseBoolean(cm.getProperty("sdlcrawler.ResumableCrawling")));
+        config.setIncludeHttpsPages(Boolean.parseBoolean(cm.getProperty("sdlcrawler.IncludeHttpsPages")));
+        config.setMaxTotalConnections(Integer.parseInt(cm.getProperty("sdlcrawler.MaxTotalConnections")));
+        config.setMaxPagesToFetch(Integer.parseInt(cm.getProperty("sdlcrawler.MaxPagesToFetch")));
         System.out.println(config.toString());
 
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);

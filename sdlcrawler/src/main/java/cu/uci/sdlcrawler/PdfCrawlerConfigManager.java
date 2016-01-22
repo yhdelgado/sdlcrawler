@@ -40,7 +40,7 @@ public class PdfCrawlerConfigManager {
 
     public void generateDefaultConfigFile() throws IOException {
         Properties configOpts = new Properties();
-        configOpts.setProperty("sdlcrawler.ProxyDomain", "example.com");
+        //configOpts.setProperty("sdlcrawler.ProxyDomain", "example.com");
         configOpts.setProperty("sdlcrawler.ProxyHost", "localhost");
         configOpts.setProperty("sdlcrawler.ProxyPort", "3128");
         configOpts.setProperty("sdlcrawler.ProxyUser", "myuser");
