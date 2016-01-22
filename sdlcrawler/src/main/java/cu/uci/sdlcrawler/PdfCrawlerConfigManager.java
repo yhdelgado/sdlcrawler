@@ -61,6 +61,8 @@ public class PdfCrawlerConfigManager {
         configOpts.setProperty("sdlcrawler.NumberOfCrawlers", "5");
         configOpts.setProperty("sdlcrawler.SeedFile", "urls");
         configOpts.setProperty("sdlcrawler.SocketTimeout", "0");
+        configOpts.setProperty("sdlcrawler.PolitenessDelay", "200");
+        configOpts.setProperty("sdlcrawler.ConnectionTimeout", "30000");
         configOpts.store(new FileOutputStream(new File(getPath())), "Configuration Options");
     }
 
