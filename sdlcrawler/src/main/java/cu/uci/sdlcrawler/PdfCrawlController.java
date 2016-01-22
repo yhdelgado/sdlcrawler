@@ -68,6 +68,9 @@ public class PdfCrawlController {
         config.setIncludeHttpsPages(Boolean.parseBoolean(cm.getProperty("sdlcrawler.IncludeHttpsPages")));
         config.setMaxTotalConnections(Integer.parseInt(cm.getProperty("sdlcrawler.MaxTotalConnections")));
         config.setMaxPagesToFetch(Integer.parseInt(cm.getProperty("sdlcrawler.MaxPagesToFetch")));
+        config.setPolitenessDelay(Integer.parseInt(cm.getProperty("sdlcrawler.PolitenessDelay")));
+        config.setConnectionTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.ConnectionTimeout")));
+
         System.out.println(config.toString());
 
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
@@ -84,6 +87,22 @@ public class PdfCrawlController {
         PdfCrawler.configure(crawlDomains, pdfFolder);
 
         controller.start(PdfCrawler.class, numberOfCrawlers);
+        List<Object> crawlersLocalData = controller.getCrawlersLocalData();
+        long totalLinks = 0;
+        long totalTextSize = 0;
+        int totalProcessedPages = 0;
+        for (Object localData : crawlersLocalData) {
+            CrawlStat stat = (CrawlStat) localData;
+            totalLinks += stat.getTotalLinks();
+            totalTextSize += stat.getTotalTextSize();
+            totalProcessedPages += stat.getTotalProcessedPages();
+        }
+
+        logger.info("Aggregated Statistics:");
+        logger.info("\tProcessed Pages: {}", totalProcessedPages);
+        logger.info("\tTotal Links found: {}", totalLinks);
+        logger.info("\tTotal Text Size: {}", totalTextSize);
+        
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date1 = new Date();
         System.out.println(dateFormat1.format(date1));
@@ -91,4 +110,5 @@ public class PdfCrawlController {
         long totalTime = endTime - startTime;
         System.out.println("Total time:" + totalTime);
     }
+
 }
