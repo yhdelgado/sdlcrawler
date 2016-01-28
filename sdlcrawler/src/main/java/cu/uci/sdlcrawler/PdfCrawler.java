@@ -59,6 +59,7 @@ public class PdfCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page page, WebURL url) {
         String href = url.getURL().toLowerCase();
+        
         if (filters.matcher(href).matches()) {
             return false;
         }
@@ -72,6 +73,7 @@ public class PdfCrawler extends WebCrawler {
 
         for (String domain : crawlDomains) {
             if (href.startsWith(domain)) {
+                System.out.println("Este es el href "+href);
                 return true;
             }
         }
@@ -80,7 +82,6 @@ public class PdfCrawler extends WebCrawler {
 
     @Override
     public void visit(Page page) {
-
         String url = page.getWebURL().getURL();
         if (page.getStatusCode() == 200) {
             System.out.println(page.getContentType() + " -- " + page.getStatusCode() + " -- " + url);

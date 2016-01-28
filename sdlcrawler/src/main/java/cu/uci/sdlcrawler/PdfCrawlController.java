@@ -26,9 +26,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +76,15 @@ public class PdfCrawlController {
         config.setConnectionTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.ConnectionTimeout")));
 
         System.out.println(config.toString());
+        Collection<BasicHeader> defaultHeaders=new HashSet<>();
+        defaultHeaders.add(new BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"));
+        defaultHeaders.add(new BasicHeader("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3"));
+        defaultHeaders.add(new BasicHeader("Accept-Language", "en-US,en;q=0.8"));
+        defaultHeaders.add(new BasicHeader("Connection", "keep-alive"));
+        //defaultHeaders.add(new BasicHeader("", ""));
+        config.setDefaultHeaders(defaultHeaders);
+        
+
 
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
         String[] crawlDomains = list.toArray(new String[list.size()]);
@@ -85,24 +98,7 @@ public class PdfCrawlController {
         }
 
         PdfCrawler.configure(crawlDomains, pdfFolder);
-
         controller.start(PdfCrawler.class, numberOfCrawlers);
-        List<Object> crawlersLocalData = controller.getCrawlersLocalData();
-        long totalLinks = 0;
-        long totalTextSize = 0;
-        int totalProcessedPages = 0;
-        for (Object localData : crawlersLocalData) {
-            CrawlStat stat = (CrawlStat) localData;
-            totalLinks += stat.getTotalLinks();
-            totalTextSize += stat.getTotalTextSize();
-            totalProcessedPages += stat.getTotalProcessedPages();
-        }
-
-        logger.info("Aggregated Statistics:");
-        logger.info("\tProcessed Pages: {}", totalProcessedPages);
-        logger.info("\tTotal Links found: {}", totalLinks);
-        logger.info("\tTotal Text Size: {}", totalTextSize);
-        
         DateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date1 = new Date();
         System.out.println(dateFormat1.format(date1));
@@ -110,5 +106,4 @@ public class PdfCrawlController {
         long totalTime = endTime - startTime;
         System.out.println("Total time:" + totalTime);
     }
-
 }
