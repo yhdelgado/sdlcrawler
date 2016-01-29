@@ -81,11 +81,8 @@ public class PdfCrawlController {
         defaultHeaders.add(new BasicHeader("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3"));
         defaultHeaders.add(new BasicHeader("Accept-Language", "en-US,en;q=0.8"));
         defaultHeaders.add(new BasicHeader("Connection", "keep-alive"));
-        //defaultHeaders.add(new BasicHeader("", ""));
         config.setDefaultHeaders(defaultHeaders);
         
-
-
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
         String[] crawlDomains = list.toArray(new String[list.size()]);
 

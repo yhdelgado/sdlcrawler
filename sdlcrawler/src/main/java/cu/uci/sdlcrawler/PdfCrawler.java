@@ -59,21 +59,16 @@ public class PdfCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page page, WebURL url) {
         String href = url.getURL().toLowerCase();
-        
+
         if (filters.matcher(href).matches()) {
             return false;
         }
-//        if (excludes.matcher(href).matches()) {
-//            return false;
-//        }
-
-        if (page.getContentType().equals("application/pdf")) {
-            return true;
+        if (excludes.matcher(href).matches()) {
+            return false;
         }
 
         for (String domain : crawlDomains) {
-            if (href.startsWith(domain)) {
-                System.out.println("Este es el href "+href);
+            if (href.startsWith(domain) && !domain.isEmpty()) {
                 return true;
             }
         }
@@ -93,9 +88,14 @@ public class PdfCrawler extends WebCrawler {
 
         String extension = ".pdf";
         String hashedName = UUID.randomUUID().toString() + extension;
+        File folder=new File(storageFolder.getAbsolutePath()+url.substring(6, url.indexOf(".")));
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
 
-        String filename = storageFolder.getAbsolutePath() + "/" + hashedName;
+        String filename = folder+"/" + hashedName;
         try {
+            System.out.println(filename);
             Files.write(page.getContentData(), new File(filename));
         } catch (IOException iox) {
             System.out.println(iox.getMessage());
