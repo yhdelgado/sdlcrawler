@@ -24,20 +24,14 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 import java.util.regex.Pattern;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * @author Yasser Ganjisaffar [lastname at gmail dot com]
  * @author Yusniel Hidalgo Delgado [yhidalgo86 at gmail dot com]
  */
 
-/*
- * This class shows how you can crawl images on the web and store them in a
- * folder. This is just for demonstration purposes and doesn't scale for large
- * number of images. For crawling millions of images you would need to store
- * downloaded images in a hierarchy of folders
- */
 public class PdfCrawler extends WebCrawler {
 
     private static final Pattern filters = Pattern.compile(".*(\\.(css|js|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v"
@@ -81,22 +75,28 @@ public class PdfCrawler extends WebCrawler {
         if (page.getStatusCode() == 200) {
             System.out.println(page.getContentType() + " -- " + page.getStatusCode() + " -- " + url);
         }
-
         if (!(page.getContentType().equals("application/pdf")) || !(page.getParseData() instanceof BinaryParseData)) {
             return;
         }
 
         String extension = ".pdf";
-        String hashedName = UUID.randomUUID().toString() + extension;
-        File folder=new File(storageFolder.getAbsolutePath()+url.substring(6, url.indexOf(".")));
-        if (!folder.exists()) {
-            folder.mkdirs();
+        File folder;
+        if (url.startsWith("http")) {
+            folder = new File(storageFolder.getAbsolutePath() + url.substring(6, url.indexOf(".")));
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+        } else {
+            folder = new File(storageFolder.getAbsolutePath() + url.substring(7, url.indexOf(".")));
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
         }
-
-        String filename = folder+"/" + hashedName;
+        byte[] content = page.getContentData();
+        String md5 = DigestUtils.md5Hex(content);
+        String filename = folder + "/" + md5 + extension;
         try {
-            System.out.println(filename);
-            Files.write(page.getContentData(), new File(filename));
+            Files.write(content, new File(filename));
         } catch (IOException iox) {
             System.out.println(iox.getMessage());
         }
