@@ -36,7 +36,7 @@ public class PdfCrawler extends WebCrawler {
 
     private static final Pattern filters = Pattern.compile(".*(\\.(css|js|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v"
             + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
-    private static final Pattern excludes = Pattern.compile("[?*!@=]");
+    //private static final Pattern excludes = Pattern.compile("[?*!@=]");
 
     private static File storageFolder;
     private static String[] crawlDomains;
@@ -57,10 +57,6 @@ public class PdfCrawler extends WebCrawler {
         if (filters.matcher(href).matches()) {
             return false;
         }
-        if (excludes.matcher(href).matches()) {
-            return false;
-        }
-
         for (String domain : crawlDomains) {
             if (href.startsWith(domain) && !domain.isEmpty()) {
                 return true;

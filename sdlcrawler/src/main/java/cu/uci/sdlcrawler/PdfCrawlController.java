@@ -78,7 +78,7 @@ public class PdfCrawlController {
         Collection<BasicHeader> defaultHeaders=new HashSet<>();
         defaultHeaders.add(new BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"));
         defaultHeaders.add(new BasicHeader("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3"));
-        defaultHeaders.add(new BasicHeader("Accept-Language", "en-US,en;q=0.8"));
+        defaultHeaders.add(new BasicHeader("Accept-Language", "en-US,en,es-ES,es;q=0.8"));
         defaultHeaders.add(new BasicHeader("Connection", "keep-alive"));
         config.setDefaultHeaders(defaultHeaders);
         
