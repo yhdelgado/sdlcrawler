@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package cu.uci.sdlcrawler;
+package cu.uci.gws.sdlcrawler;
 
 import com.google.common.io.Files;
 import edu.uci.ics.crawler4j.crawler.Page;

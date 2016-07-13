@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package cu.uci.sdlcrawler;
+package cu.uci.gws.sdlcrawler;
 
 public class CrawlStat {
   private int totalProcessedPages;

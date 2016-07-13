@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package cu.uci.sdlcrawler;
+package cu.uci.gws.sdlcrawler;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -56,7 +56,9 @@ public class PdfCrawlController {
 
         config.setCrawlStorageFolder(cm.getProperty("sdlcrawler.CrawlStorageFolder"));
         config.setProxyHost(cm.getProperty("sdlcrawler.ProxyHost"));
-        config.setProxyPort(Integer.parseInt(cm.getProperty("sdlcrawler.ProxyPort")));
+        if (!"".equals(cm.getProperty("sdlcrawler.ProxyPort"))) {
+            config.setProxyPort(Integer.parseInt(cm.getProperty("sdlcrawler.ProxyPort")));
+        }
         config.setProxyUsername(cm.getProperty("sdlcrawler.ProxyUser"));
         config.setProxyPassword(cm.getProperty("sdlcrawler.ProxyPass"));
         config.setMaxDownloadSize(Integer.parseInt(cm.getProperty("sdlcrawler.MaxDownloadSize")));
@@ -75,13 +77,13 @@ public class PdfCrawlController {
         config.setConnectionTimeout(Integer.parseInt(cm.getProperty("sdlcrawler.ConnectionTimeout")));
 
         System.out.println(config.toString());
-        Collection<BasicHeader> defaultHeaders=new HashSet<>();
+        Collection<BasicHeader> defaultHeaders = new HashSet<>();
         defaultHeaders.add(new BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"));
         defaultHeaders.add(new BasicHeader("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3"));
         defaultHeaders.add(new BasicHeader("Accept-Language", "en-US,en,es-ES,es;q=0.8"));
         defaultHeaders.add(new BasicHeader("Connection", "keep-alive"));
         config.setDefaultHeaders(defaultHeaders);
-        
+
         List<String> list = Files.readAllLines(Paths.get("config/" + cm.getProperty("sdlcrawler.SeedFile")), StandardCharsets.UTF_8);
         String[] crawlDomains = list.toArray(new String[list.size()]);
 
